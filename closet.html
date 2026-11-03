@@ -12,9 +12,83 @@
 
   <main class="page">
     <div class="page__intro">
-      <h1>옷장</h1>
+      <h1 tabindex="-1">옷장</h1>
     </div>
-    <p class="placeholder">준비 중이에요.</p>
+
+    <form class="filters" id="closet-filters" role="search" autocomplete="off" hidden>
+      <div class="field filters__search">
+        <label class="field__label" for="closet-search">검색</label>
+        <input class="input" id="closet-search" name="search" type="search" placeholder="이름이나 태그로 찾기">
+      </div>
+      <div class="field">
+        <label class="field__label" for="filter-category">종류</label>
+        <select class="select" id="filter-category" name="category"><option value="">전체</option></select>
+      </div>
+      <div class="field">
+        <label class="field__label" for="filter-color">색상</label>
+        <select class="select" id="filter-color" name="color"><option value="">전체</option></select>
+      </div>
+      <div class="field">
+        <label class="field__label" for="filter-thickness">두께</label>
+        <select class="select" id="filter-thickness" name="thickness"><option value="">전체</option></select>
+      </div>
+      <button class="button button--secondary" type="button" data-reset>필터 초기화</button>
+    </form>
+
+    <p class="closet-count" id="closet-count" role="status"></p>
+    <p class="form-status form-status--error" id="closet-error" role="alert"></p>
+
+    <ul class="closet-grid" id="closet-grid" hidden></ul>
+
+    <p class="placeholder" id="closet-no-results" hidden>조건에 맞는 옷이 없어요. 검색어나 필터를 바꿔 보세요.</p>
+
+    <section class="card empty-state" id="closet-empty" hidden>
+      <h2>옷장이 아직 비어 있어요</h2>
+      <p>첫 번째 옷을 추가해 보세요.</p>
+      <a class="button" href="add.html">옷 추가하러 가기</a>
+    </section>
   </main>
+
+  <template id="clothes-card-template">
+    <li class="card clothes-card">
+      <img class="clothes-card__photo" data-field="photo" alt="">
+      <h2 class="clothes-card__name" data-field="name"></h2>
+      <dl class="clothes-card__details">
+        <div><dt>종류</dt><dd data-field="category"></dd></div>
+        <div>
+          <dt>색상</dt>
+          <dd>
+            <span class="swatch" data-field="color-swatch" aria-hidden="true"></span>
+            <span data-field="color-label"></span>
+          </dd>
+        </div>
+        <div><dt>두께</dt><dd data-field="thickness"></dd></div>
+      </dl>
+      <ul class="tag-list" data-field="tags" aria-label="태그"></ul>
+      <div class="clothes-card__actions">
+        <button class="button button--secondary" type="button" data-field="edit">수정</button>
+        <button class="button button--danger" type="button" data-field="delete">삭제</button>
+      </div>
+    </li>
+  </template>
+
+  <dialog class="dialog" id="edit-dialog" aria-labelledby="edit-dialog-title">
+    <h2 id="edit-dialog-title">옷 정보 수정</h2>
+    <div id="edit-form"></div>
+  </dialog>
+
+  <dialog class="dialog dialog--small" id="delete-dialog" aria-labelledby="delete-dialog-title">
+    <h2 id="delete-dialog-title">이 옷을 삭제할까요?</h2>
+    <p class="dialog__text">‘<span id="delete-name"></span>’을(를) 삭제하면 되돌릴 수 없어요.</p>
+    <form class="clothes-form__actions" method="dialog">
+      <button class="button button--secondary" value="cancel">취소</button>
+      <button class="button button--danger" value="confirm">삭제</button>
+    </form>
+  </dialog>
+
+  <script src="js/db.js"></script>
+  <script src="js/clothes-options.js"></script>
+  <script src="js/clothes-form.js"></script>
+  <script src="js/closet.js"></script>
 </body>
 </html>
