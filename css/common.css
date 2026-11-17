@@ -532,6 +532,139 @@ img {
   text-align: center;
 }
 
+/* Outfit recommendation (main.html) */
+.outfit {
+  display: grid;
+  gap: var(--space-4);
+  margin-top: var(--space-8);
+}
+
+.outfit[aria-busy="true"] .outfit-grid {
+  opacity: 0.5;
+}
+
+.outfit__status,
+.outfit__count {
+  color: var(--color-muted);
+  font-size: 0.875rem;
+}
+
+.outfit__status:empty,
+.outfit__count:empty {
+  display: none;
+}
+
+.outfit__summary {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.outfit__reason {
+  font-weight: 600;
+}
+
+.outfit__notes {
+  display: grid;
+  gap: var(--space-1);
+  margin: 0;
+  padding-left: var(--space-6);
+  color: var(--color-accent);
+  font-size: 0.9375rem;
+}
+
+.outfit-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.outfit-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+  padding: var(--space-3);
+}
+
+.outfit-card__slot {
+  color: var(--color-primary-dark);
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+
+.outfit-card__photo,
+.outfit-card__placeholder {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: var(--radius-s);
+  background: var(--color-bg);
+}
+
+.outfit-card__photo {
+  object-fit: contain;
+}
+
+.outfit-card__placeholder {
+  display: grid;
+  place-items: center;
+  border: 2px dashed var(--color-border);
+  color: var(--color-muted);
+  font-size: 2.5rem;
+  font-weight: 300;
+}
+
+.outfit-card__name {
+  font-size: 1rem;
+}
+
+.outfit-card__meta {
+  margin-top: calc(-1 * var(--space-2));
+  color: var(--color-muted);
+  font-size: 0.8125rem;
+}
+
+.outfit-card__reason {
+  color: var(--color-muted);
+  font-size: 0.875rem;
+}
+
+.outfit-card--missing .outfit-card__placeholder {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.outfit-card--missing .outfit-card__name {
+  color: var(--color-accent);
+}
+
+.outfit-card--fallback .outfit-card__reason {
+  color: var(--color-accent);
+}
+
+.outfit__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.outfit-missing {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-3);
+  border-color: var(--color-accent);
+}
+
+.outfit h3 {
+  margin: 0;
+  font-size: 1.0625rem;
+  line-height: 1.3;
+}
+
 /* Dialogs */
 .dialog {
   width: min(36rem, calc(100vw - 2 * var(--space-4)));
@@ -608,6 +741,14 @@ img {
     padding: var(--space-4);
   }
 
+  .outfit-grid {
+    gap: var(--space-4);
+  }
+
+  .outfit-card {
+    padding: var(--space-4);
+  }
+
   .weather__details {
     display: flex;
     flex-wrap: wrap;
@@ -643,5 +784,9 @@ img {
 
   .hero .page__intro {
     margin-bottom: 0;
+  }
+
+  .outfit-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }

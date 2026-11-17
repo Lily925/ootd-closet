@@ -1,5 +1,10 @@
 // Renders the weather card into any page with a <section data-weather> element.
 // Uses the browser's location when allowed, and otherwise falls back to a city.
+//
+// Other scripts can follow along through events on `document`:
+//   weather:loading  a new request has started
+//   weather:change   detail is the weather object from /api/weather
+//   weather:error    detail is { message }
 (function () {
   const root = document.querySelector('[data-weather]');
   if (!root) return;
@@ -106,10 +111,16 @@
     icon.hidden = !weather.icon;
     if (weather.icon) icon.src = `https://openweathermap.org/img/wn/${weather.icon}@2x.png`;
     dataPanel.hidden = false;
+    announce('change', weather);
+  }
+
+  function announce(type, detail) {
+    document.dispatchEvent(new CustomEvent(`weather:${type}`, { detail }));
   }
 
   async function loadWeather(params, note = '') {
     const request = ++latestRequest;
+    announce('loading');
     retry = () => loadWeather(params, note);
     retryButton.hidden = true;
     status.classList.remove('weather__status--error');
@@ -134,6 +145,7 @@
       dataPanel.hidden = true;
       status.classList.add('weather__status--error');
       retryButton.hidden = false;
+      announce('error', { message });
     }
     status.textContent = message || note;
   }

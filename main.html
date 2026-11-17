@@ -13,11 +13,54 @@
   <main class="page">
     <div class="page__intro">
       <h1>오늘의 코디</h1>
-      <p class="lead">지금 날씨를 확인해 보세요.</p>
+      <p class="lead">지금 날씨에 맞춰 내 옷장에서 코디를 골라 드려요.</p>
     </div>
     <section class="card weather" data-weather aria-label="현재 날씨"></section>
+
+    <section class="outfit" id="outfit" aria-labelledby="outfit-title">
+      <h2 id="outfit-title">추천 코디</h2>
+      <p class="outfit__status" id="outfit-status" role="status">날씨를 확인하면 코디를 추천해 드려요.</p>
+
+      <div class="outfit__summary" id="outfit-summary" hidden>
+        <p class="outfit__reason" id="outfit-reason"></p>
+        <ul class="outfit__notes" id="outfit-notes"></ul>
+      </div>
+
+      <ul class="outfit-grid" id="outfit-grid" aria-label="추천 코디" hidden></ul>
+
+      <div class="outfit__actions" id="outfit-actions" hidden>
+        <button class="button button--secondary" id="outfit-next" type="button">다른 코디 보기</button>
+        <p class="outfit__count" id="outfit-count" role="status"></p>
+      </div>
+
+      <section class="card outfit-missing" id="outfit-missing" aria-labelledby="outfit-missing-title" hidden>
+        <h3 id="outfit-missing-title"></h3>
+        <p id="outfit-missing-advice"></p>
+        <a class="button" href="add.html">옷 추가하러 가기</a>
+      </section>
+
+      <section class="card empty-state" id="outfit-empty" hidden>
+        <h3>옷장이 아직 비어 있어요</h3>
+        <p id="outfit-empty-advice"></p>
+        <a class="button" href="add.html">옷 추가하러 가기</a>
+      </section>
+    </section>
   </main>
 
+  <template id="outfit-card-template">
+    <li class="card outfit-card">
+      <p class="outfit-card__slot" data-field="slot"></p>
+      <img class="outfit-card__photo" data-field="photo" alt="">
+      <div class="outfit-card__placeholder" data-field="placeholder" aria-hidden="true"></div>
+      <h3 class="outfit-card__name" data-field="name"></h3>
+      <p class="outfit-card__reason" data-field="reason"></p>
+    </li>
+  </template>
+
+  <script src="js/db.js"></script>
+  <script src="js/clothes-options.js"></script>
+  <script src="js/rules.js"></script>
+  <script src="js/outfit.js"></script>
   <script src="js/weather.js"></script>
 </body>
 </html>
