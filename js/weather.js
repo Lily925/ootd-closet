@@ -129,14 +129,17 @@
 
     let message = null;
     try {
-      const response = await fetch(`/api/weather?${new URLSearchParams(params)}`);
+      const response = await fetch(window.AppConfig.apiUrl(`/api/weather?${new URLSearchParams(params)}`));
       const body = await response.json();
       if (request !== latestRequest) return;
       if (response.ok) render(body, CITIES.find((c) => c.value === params.city)?.label);
       else message = body.error || '날씨를 불러오지 못했어요.';
     } catch {
       if (request !== latestRequest) return;
-      message = '서버에 연결하지 못했어요. 서버가 실행 중인지 확인하고 http://localhost:3000 으로 접속해 주세요.';
+      // On Render's free plan the server sleeps when idle and takes up to a minute to wake.
+      message = window.AppConfig.API_BASE_URL.includes('localhost')
+        ? '서버에 연결하지 못했어요. 서버가 실행 중인지 확인하고 http://localhost:3000 으로 접속해 주세요.'
+        : '서버에 연결하지 못했어요. 서버가 깨어나는 중일 수 있으니 잠시 후 다시 시도해 주세요.';
     }
 
     root.removeAttribute('aria-busy');

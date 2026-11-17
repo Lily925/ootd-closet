@@ -10,8 +10,34 @@ const OWM_TIMEOUT_MS = 8000;
 const ROOT = path.join(__dirname, '..');
 const PAGES = ['index', 'main', 'closet', 'add', 'history'];
 
+// Pages allowed to call this API from another origin: the GitHub Pages site,
+// and any local port (the server itself on 3000, or an editor's live server).
+const ALLOWED_ORIGINS = ['https://lily925.github.io'];
+const LOCAL_ORIGIN = /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/;
+
 const app = express();
 app.disable('x-powered-by');
+
+// CORS: the browser only lets another site read our responses if we name that
+// site in Access-Control-Allow-Origin. Other origins get no header, so the
+// browser blocks them.
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (origin && (ALLOWED_ORIGINS.includes(origin) || LOCAL_ORIGIN.test(origin))) {
+    res.set('Access-Control-Allow-Origin', origin);
+    res.set('Access-Control-Allow-Methods', 'GET, POST');
+    res.set('Access-Control-Allow-Headers', 'Content-Type');
+  }
+  res.set('Vary', 'Origin'); // The answer depends on who asked, so caches must not mix them up.
+
+  // A POST with a JSON body (like the future /api/recommend) is preceded by an
+  // OPTIONS "preflight" request asking for permission. Answer it right away.
+  if (req.method === 'OPTIONS') {
+    res.sendStatus(204);
+    return;
+  }
+  next();
+});
 
 // Serve only the public files by name. Serving the project root as a static
 // folder would also expose server/.env, and with it the API key.
@@ -107,9 +133,13 @@ app.get('/api/weather', async (req, res) => {
   }
 });
 
-// Bound to this machine only, so other devices on your network can't spend your API quota.
-app.listen(PORT, '127.0.0.1', () => {
-  console.log(`Server running at http://localhost:${PORT}`);
+// Locally, bound to this machine only, so other devices on your network can't
+// spend your API quota. Render sets RENDER=true and needs the server to accept
+// outside connections, so there it listens on every network interface.
+const HOST = process.env.HOST || (process.env.RENDER ? '0.0.0.0' : '127.0.0.1');
+
+app.listen(PORT, HOST, () => {
+  console.log(`Server running on ${HOST}:${PORT}`);
   if (!process.env.OPENWEATHER_API_KEY) {
     console.warn('Warning: OPENWEATHER_API_KEY is not set, so /api/weather will return an error.');
   }
