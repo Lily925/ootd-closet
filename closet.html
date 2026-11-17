@@ -47,6 +47,17 @@
       <p>첫 번째 옷을 추가해 보세요.</p>
       <a class="button" href="add.html">옷 추가하러 가기</a>
     </section>
+
+    <section class="card backup" aria-labelledby="backup-title">
+      <h2 id="backup-title">백업</h2>
+      <p class="backup__text">옷장은 이 브라우저에만 저장돼요. 파일로 내보내 두면 다른 기기로 옮기거나 나중에 다시 불러올 수 있어요. 이미 있는 옷은 다시 추가되지 않아요.</p>
+      <div class="backup__actions">
+        <button class="button button--secondary" id="backup-export" type="button">옷장 내보내기</button>
+        <button class="button button--secondary" id="backup-import" type="button">옷장 불러오기</button>
+        <input id="backup-file" type="file" accept=".json,application/json" hidden>
+      </div>
+      <p class="form-status" id="backup-status" role="status"></p>
+    </section>
   </main>
 
   <template id="clothes-card-template">
@@ -90,5 +101,6 @@
   <script src="js/clothes-options.js"></script>
   <script src="js/clothes-form.js"></script>
   <script src="js/closet.js"></script>
+  <script src="js/backup.js"></script>
 </body>
 </html>

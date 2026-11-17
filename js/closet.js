@@ -180,4 +180,6 @@
   // come from the browser's cache and miss clothes added on add.html. It runs
   // after the browser restores the filter fields, so those are applied too.
   window.addEventListener('pageshow', load);
+  // backup.js fires this after importing clothes from a file.
+  document.addEventListener('closet:changed', load);
 })();

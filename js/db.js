@@ -98,5 +98,38 @@ window.ClothesDB = (function () {
     await withStore('readwrite', (store) => store.delete(id));
   }
 
-  return { add, get, getAll, update, delete: remove };
+  /**
+   * Adds items that already have an id (from a backup file), skipping any id
+   * that's already taken. Resolves with { added, skipped }. It's one
+   * transaction, so if something else goes wrong (like a full disk) nothing
+   * is added at all.
+   */
+  async function importItems(items) {
+    const db = await open();
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction(STORE, 'readwrite');
+      const store = transaction.objectStore(STORE);
+      let added = 0;
+      let skipped = 0;
+
+      for (const item of items) {
+        const request = store.add(item);
+        request.onsuccess = () => { added++; };
+        request.onerror = (event) => {
+          // ConstraintError means the id exists. Mark it handled so the rest
+          // of the import carries on instead of the whole transaction aborting.
+          if (request.error.name === 'ConstraintError') {
+            event.preventDefault();
+            event.stopPropagation();
+            skipped++;
+          }
+        };
+      }
+
+      transaction.oncomplete = () => resolve({ added, skipped });
+      transaction.onabort = () => reject(transaction.error);
+    });
+  }
+
+  return { add, get, getAll, update, delete: remove, importItems };
 })();
