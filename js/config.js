@@ -4,9 +4,8 @@
 // the API is the Express server on port 3000. Everywhere else, such as GitHub
 // Pages, it's the server deployed on Render.
 window.AppConfig = (function () {
-  // TODO: replace with your Render URL, e.g. 'https://ootd-closet-api.onrender.com'
-  // (no slash at the end).
-  const PRODUCTION_API_BASE_URL = 'https://YOUR-RENDER-SERVICE.onrender.com';
+  // The server deployed on Render (no slash at the end).
+  const PRODUCTION_API_BASE_URL = 'https://ootd-closet.onrender.com';
   const LOCAL_API_BASE_URL = 'http://localhost:3000';
 
   const isLocal = ['localhost', '127.0.0.1', ''].includes(location.hostname);
